@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bitcoin Node Observatory</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Bitcoin Node Observatory</h1>
+    <p class="subtitle">
+      Continuous measurement of reachable nodes — clearnet and onion measured separately
+      <a href="https://github.com/OWNER/btc-node-data#methodology" target="_blank" rel="noopener">[Methodology]</a>
+    </p>
+  </header>
+
+  <nav id="range-switcher" aria-label="Time range">
+    <button data-range="day">Day</button>
+    <button data-range="week" class="active">Week</button>
+    <button data-range="month">Month</button>
+    <button data-range="quarter">Quarter</button>
+    <button data-range="year">Year</button>
+    <button data-range="all">All</button>
+  </nav>
+
+  <section class="stats" id="stats">
+    <div class="stat"><span class="label">clearnet (instantaneous)</span><span class="value" id="stat-clearnet">–</span></div>
+    <div class="stat"><span class="label">clearnet (union 24h)</span><span class="value" id="stat-clearnet-union">–</span></div>
+    <div class="stat"><span class="label">onion (instantaneous)</span><span class="value" id="stat-onion">–</span></div>
+    <div class="stat"><span class="label">churn (inst / union)</span><span class="value" id="stat-churn">–</span></div>
+  </section>
+
+  <section class="chart-block">
+    <h2>Node Count</h2>
+    <p class="note">
+      clearnet and onion are measured as <strong>separate series by methodology</strong>
+      (the combined value is indicative only).
+      <code>instantaneous</code> is the number of successful handshakes within one round
+      (Bitnodes-style, lower bound); <code>union_24h</code> is the union over the last 24 hours
+      (KIT-style, upper bound).
+      <a href="https://github.com/OWNER/btc-node-data#dual-definition-of-reachability" target="_blank" rel="noopener">Definitions</a>
+    </p>
+    <div id="chart-count" class="chart"></div>
+    <p class="note caveat">
+      ⚠ Onion absolute counts are not authoritative: address count ≠ host count, no cross-checking
+      is possible, and Sybil creation costs are near zero. Watch trends in ratios instead.
+      <a href="https://github.com/OWNER/btc-node-data#epistemic-weakness-of-onion-node-counts" target="_blank" rel="noopener">Details</a>
+    </p>
+  </section>
+
+  <section class="chart-block">
+    <h2>Churn (instantaneous / union_24h)</h2>
+    <p class="note">Closer to 1 means a stable node set; lower means heavier churn.</p>
+    <div id="chart-churn" class="chart chart-small"></div>
+  </section>
+
+  <footer>
+    <p>
+      Data: <a href="https://github.com/OWNER/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>
+      (CC-BY 4.0 / raw data archived in Releases and on Zenodo).
+      Measured from a single vantage point with candidates sourced from our node's addrman;
+      this is not full coverage of the network.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
