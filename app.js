@@ -7,7 +7,7 @@
 // Replace with the btc-node-data raw URL when deploying.
 // For local development, symlink the data repo as ../data and point DATA_BASE at it.
 const DATA_BASE = window.DATA_BASE ||
-  'https://raw.githubusercontent.com/OWNER/btc-node-data/main/aggregates';
+  'https://raw.githubusercontent.com/azuchi/btc-node-data/main/aggregates';
 
 const COLORS = {
   clearnetInst: '#f7931a',   // clearnet instantaneous
