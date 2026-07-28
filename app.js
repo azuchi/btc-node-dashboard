@@ -17,6 +17,117 @@ const COLORS = {
   combined: '#999999'
 };
 
+/* ---- i18n ---------------------------------------------------------------- */
+
+const I18N = {
+  en: {
+    'subtitle': 'Continuous measurement of reachable nodes — clearnet and onion measured separately ' +
+      '<a href="https://github.com/azuchi/btc-node-data#methodology" target="_blank" rel="noopener">[Methodology]</a>',
+    'range.day': 'Day', 'range.week': 'Week', 'range.month': 'Month',
+    'range.quarter': 'Quarter', 'range.year': 'Year', 'range.all': 'All',
+    'stat.clearnetInst': 'clearnet (reachable now)',
+    'stat.clearnetUnion': 'clearnet (seen in 24h)',
+    'stat.onionInst': 'onion (reachable now)',
+    'stat.churn': 'stability (now / 24h)',
+    'nodeCount.title': 'Node Count',
+    'nodeCount.note': 'clearnet and onion are measured as <strong>separate series by methodology</strong> ' +
+      '(the combined value is indicative only). "Reachable now" (<code>instantaneous</code>) is the ' +
+      'number of nodes that answered a handshake in the latest 15-minute round (Bitnodes-style, lower ' +
+      'bound); "seen in 24h" (<code>union_24h</code>) counts nodes that answered at least once in the ' +
+      'last 24 hours (KIT-style, upper bound). ' +
+      '<a href="https://github.com/azuchi/btc-node-data#dual-definition-of-reachability" target="_blank" rel="noopener">Definitions</a>',
+    'nodeCount.caveat': '⚠ Onion absolute counts are not authoritative: address count ≠ host count, ' +
+      'no cross-checking is possible, and Sybil creation costs are near zero. Watch trends in ratios instead. ' +
+      '<a href="https://github.com/azuchi/btc-node-data#epistemic-weakness-of-onion-node-counts" target="_blank" rel="noopener">Details</a>',
+    'churn.title': 'Node-Set Stability (reachable now ÷ seen in 24h)',
+    'churn.note': 'The share of nodes seen at least once in the last 24 hours that are reachable ' +
+      'right now. Close to 1 means mostly always-on nodes; lower means heavier churn ' +
+      '(nodes coming and going).',
+    'network.title': 'Network Types (latest)',
+    'network.note': 'Breakdown of the latest round by address type. ipv4 / ipv6 are the clearnet ' +
+      'series; onion is measured separately and never combined. i2p / cjdns addresses are collected ' +
+      'but not probed in v0.1.0, so they have no reachability numbers.',
+    'country.title': 'Country Distribution (clearnet)',
+    'country.note': "Successful handshakes in the latest daily export, by country of the node's IP address " +
+      '(top 20 countries + other). Country reflects where the IP is registered (GeoLite2), ' +
+      'not necessarily where the operator lives. Onion nodes have no IP and are excluded.',
+    'country.caveat': 'Includes GeoLite2 data created by MaxMind, available from ' +
+      '<a href="https://www.maxmind.com" target="_blank" rel="noopener">maxmind.com</a>. ' +
+      'Hong Kong and Taiwan appear in the ranking only (no separate polygon in the map data).',
+    'footer.text': 'Data: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a> ' +
+      '(CC-BY 4.0 / raw data archived in Releases and on Zenodo). Measured from a single vantage point ' +
+      "with candidates sourced from our node's addrman; this is not full coverage of the network.",
+    'series.clearnetInst': 'clearnet reachable now',
+    'series.clearnetUnion': 'clearnet seen in 24h',
+    'series.onionInst': 'onion reachable now',
+    'series.onionUnion': 'onion seen in 24h',
+    'series.combined': 'combined (indicative)',
+    'series.clearnetChurn': 'clearnet stability',
+    'series.onionChurn': 'onion stability',
+    'unit.nodes': 'nodes',
+    'map.noData': 'no data',
+    'geo.other': 'other',
+    'geo.unknown': 'unknown',
+    'geo.empty': 'No country data yet (GeoIP resolution has not run).',
+    'geo.unavailable': 'Country data unavailable.',
+    'error.load': 'Failed to load data'
+  },
+  ja: {
+    'subtitle': '到達可能ノードの継続測定 — clearnet と onion は分離して測定 ' +
+      '<a href="https://github.com/azuchi/btc-node-data#methodology" target="_blank" rel="noopener">[測定方法]</a>',
+    'range.day': '日', 'range.week': '週', 'range.month': '月',
+    'range.quarter': '四半期', 'range.year': '年', 'range.all': '全期間',
+    'stat.clearnetInst': 'clearnet（現在到達可能）',
+    'stat.clearnetUnion': 'clearnet（24時間以内に到達）',
+    'stat.onionInst': 'onion（現在到達可能）',
+    'stat.churn': '安定度（現在 ÷ 24h）',
+    'nodeCount.title': 'ノード数',
+    'nodeCount.note': 'clearnet と onion は<strong>測定方法上、別々の系列</strong>として測定しています' +
+      '（合算値は参考値）。「現在到達可能」（<code>instantaneous</code>）は直近の15分ラウンドで' +
+      'ハンドシェイクに応答したノード数（Bitnodes 方式、下限値）、「24h以内」（<code>union_24h</code>）は' +
+      '直近24時間に一度でも応答したノードの総数（KIT 方式、上限値）です。' +
+      '<a href="https://github.com/azuchi/btc-node-data#dual-definition-of-reachability" target="_blank" rel="noopener">定義</a>',
+    'nodeCount.caveat': '⚠ onion の絶対数は確定的な数値ではありません: アドレス数 ≠ ホスト数であり、' +
+      '相互検証が不可能で、Sybil 作成コストがほぼゼロのためです。比率の推移に注目してください。' +
+      '<a href="https://github.com/azuchi/btc-node-data#epistemic-weakness-of-onion-node-counts" target="_blank" rel="noopener">詳細</a>',
+    'churn.title': 'ノード集合の安定度（現在到達可能 ÷ 24時間以内に到達）',
+    'churn.note': '直近24時間に一度でも到達できたノードのうち、いま到達できているノードの割合です。' +
+      '1 に近いほど常時稼働のノードが中心で、低いほどノードの出入り（チャーン）が激しいことを示します。',
+    'network.title': 'ネットワーク種別（最新値）',
+    'network.note': '最新ラウンドのアドレス種別ごとの内訳です。ipv4 / ipv6 が clearnet 系列で、' +
+      'onion は別系列として測定しています（合算しません）。i2p / cjdns のアドレスも収集していますが、' +
+      'v0.1.0 ではプローブ対象外のため到達数はありません。',
+    'country.title': '国別分布（clearnet）',
+    'country.note': '最新の日次エクスポートにおけるハンドシェイク成功ノードの、IP アドレスの国別内訳' +
+      '（上位20カ国 + other）。国は IP の登録地（GeoLite2）であり、運用者の所在地とは限りません。' +
+      'onion ノードは IP を持たないため対象外です。',
+    'country.caveat': '本内訳は MaxMind 作成の GeoLite2 データを含みます' +
+      '（<a href="https://www.maxmind.com" target="_blank" rel="noopener">maxmind.com</a>）。' +
+      '香港・台湾は地図データに単独ポリゴンがないためランキングのみに表示されます。',
+    'footer.text': 'データ: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>' +
+      '（CC-BY 4.0 / raw データは Releases と Zenodo にアーカイブ）。単一観測点から、自ノードの addrman を' +
+      '候補として測定しており、ネットワーク全体の完全な網羅ではありません。',
+    'series.clearnetInst': 'clearnet（現在）',
+    'series.clearnetUnion': 'clearnet（24h以内）',
+    'series.onionInst': 'onion（現在）',
+    'series.onionUnion': 'onion（24h以内）',
+    'series.combined': '合算（参考値）',
+    'series.clearnetChurn': 'clearnet 安定度',
+    'series.onionChurn': 'onion 安定度',
+    'unit.nodes': 'ノード',
+    'map.noData': 'データなし',
+    'geo.other': 'その他',
+    'geo.unknown': '不明',
+    'geo.empty': '国別データはまだありません（GeoIP 解決が未実行です）。',
+    'geo.unavailable': '国別データを取得できません。',
+    'error.load': 'データの読み込みに失敗しました'
+  }
+};
+
+let LANG = localStorage.getItem('lang') ||
+  ((navigator.language || '').startsWith('ja') ? 'ja' : 'en');
+const t = key => I18N[LANG]?.[key] ?? I18N.en[key] ?? key;
+
 const countChart = echarts.init(document.getElementById('chart-count'));
 const churnChart = echarts.init(document.getElementById('chart-churn'));
 const mapChart = echarts.init(document.getElementById('chart-map'));
@@ -55,41 +166,53 @@ function render(data) {
   const clearnet = data.series.clearnet || [];
   const onion = data.series.onion || [];
 
+  // ECharts defaults to near-black text; follow the page theme instead
+  const ink = cssVar('--fg');
+  const inkMuted = cssVar('--muted');
+  const gridLine = cssVar('--border');
+
   countChart.setOption({
     tooltip: { trigger: 'axis' },
     legend: {
-      data: ['clearnet instantaneous', 'clearnet union_24h',
-             'onion instantaneous', 'onion union_24h', 'combined (indicative)'],
-      selected: { 'combined (indicative)': false }  // combined is secondary: off by default
+      data: [t('series.clearnetInst'), t('series.clearnetUnion'),
+             t('series.onionInst'), t('series.onionUnion'), t('series.combined')],
+      selected: { [t('series.combined')]: false },  // combined is secondary: off by default
+      textStyle: { color: ink },
+      inactiveColor: inkMuted
     },
-    xAxis: { type: 'time' },
-    yAxis: { type: 'value', name: 'nodes', min: 0 },
-    dataZoom: [{ type: 'inside' }, { type: 'slider' }],
-    grid: { left: 60, right: 20, top: 60, bottom: 70 },
+    xAxis: { type: 'time', axisLabel: { color: inkMuted } },
+    yAxis: { type: 'value', name: t('unit.nodes'), min: 0,
+             nameTextStyle: { color: inkMuted }, axisLabel: { color: inkMuted },
+             splitLine: { lineStyle: { color: gridLine } } },
+    dataZoom: [{ type: 'inside' }],
+    grid: { left: 60, right: 20, top: 60, bottom: 30 },
     series: [
-      { name: 'clearnet instantaneous', type: 'line', showSymbol: false,
+      { name: t('series.clearnetInst'), type: 'line', showSymbol: false,
         color: COLORS.clearnetInst, data: toPairs(clearnet, 1) },
-      { name: 'clearnet union_24h', type: 'line', showSymbol: false,
+      { name: t('series.clearnetUnion'), type: 'line', showSymbol: false,
         lineStyle: { type: 'dashed' }, color: COLORS.clearnetUnion, data: toPairs(clearnet, 2) },
-      { name: 'onion instantaneous', type: 'line', showSymbol: false,
+      { name: t('series.onionInst'), type: 'line', showSymbol: false,
         color: COLORS.onionInst, data: toPairs(onion, 1) },
-      { name: 'onion union_24h', type: 'line', showSymbol: false,
+      { name: t('series.onionUnion'), type: 'line', showSymbol: false,
         lineStyle: { type: 'dashed' }, color: COLORS.onionUnion, data: toPairs(onion, 2) },
-      { name: 'combined (indicative)', type: 'line', showSymbol: false,
+      { name: t('series.combined'), type: 'line', showSymbol: false,
         lineStyle: { type: 'dotted' }, color: COLORS.combined, data: combinedSeries(clearnet, onion) }
     ]
   }, true);
 
   churnChart.setOption({
     tooltip: { trigger: 'axis' },
-    legend: { data: ['clearnet churn', 'onion churn'] },
-    xAxis: { type: 'time' },
-    yAxis: { type: 'value', min: 0, max: 1 },
+    legend: { data: [t('series.clearnetChurn'), t('series.onionChurn')],
+              textStyle: { color: ink }, inactiveColor: inkMuted },
+    xAxis: { type: 'time', axisLabel: { color: inkMuted } },
+    yAxis: { type: 'value', min: 0, max: 1,
+             axisLabel: { color: inkMuted },
+             splitLine: { lineStyle: { color: gridLine } } },
     grid: { left: 60, right: 20, top: 40, bottom: 30 },
     series: [
-      { name: 'clearnet churn', type: 'line', showSymbol: false,
+      { name: t('series.clearnetChurn'), type: 'line', showSymbol: false,
         color: COLORS.clearnetInst, data: churnSeries(clearnet) },
-      { name: 'onion churn', type: 'line', showSymbol: false,
+      { name: t('series.onionChurn'), type: 'line', showSymbol: false,
         color: COLORS.onionInst, data: churnSeries(onion) }
     ]
   }, true);
@@ -108,21 +231,24 @@ function updateStats(clearnet, onion) {
     lastC && lastC[2] > 0 ? (lastC[1] / lastC[2]).toFixed(3) : '–';
 }
 
+let lastRangeData = null;
+
 async function show(granularity) {
   document.querySelectorAll('#range-switcher button').forEach(b =>
     b.classList.toggle('active', b.dataset.range === granularity));
   try {
-    render(await loadRange(granularity));
+    lastRangeData = await loadRange(granularity);
+    render(lastRangeData);
   } catch (e) {
     console.error(e);
-    countChart.setOption({ title: { text: 'Failed to load data', left: 'center', top: 'middle' } });
+    countChart.setOption({ title: { text: t('error.load'), left: 'center', top: 'middle' } });
   }
 }
 
 document.querySelectorAll('#range-switcher button').forEach(b =>
   b.addEventListener('click', () => show(b.dataset.range)));
 
-show('week');
+show('day');
 
 /* ---- Country distribution (clearnet): choropleth map + ranking ---------- */
 
@@ -187,10 +313,24 @@ const MAP_BUCKETS = [
 const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
+// Localized country names for the ranking (the map's GeoJSON features stay English)
+function regionName(cc) {
+  try {
+    return new Intl.DisplayNames([LANG], { type: 'region' }).of(cc) || cc;
+  } catch {
+    return cc;
+  }
+}
+
 let geoLatest = null;
 
 function renderGeoMap(byCountry, date) {
-  const ramp = MAP_RAMPS[darkScheme.matches ? 'dark' : 'light'];
+  const dark = darkScheme.matches;
+  const ramp = MAP_RAMPS[dark ? 'dark' : 'light'];
+  // Land without data gets a neutral fill slightly off the page background so
+  // the landmass silhouette stays visible; country borders use the background
+  // color to read as gaps.
+  const neutralLand = dark ? '#272c35' : '#ececec';
   const fmt = n => n.toLocaleString('en-US');
   const data = Object.entries(byCountry)
     .filter(([cc]) => cc !== 'other' && cc !== 'unknown')
@@ -199,7 +339,9 @@ function renderGeoMap(byCountry, date) {
   mapChart.setOption({
     tooltip: {
       trigger: 'item',
-      formatter: p => Number.isFinite(p.value) ? `${p.name}: ${fmt(p.value)} nodes` : `${p.name}: no data`
+      formatter: p => Number.isFinite(p.value)
+        ? `${p.name}: ${fmt(p.value)} ${t('unit.nodes')}`
+        : `${p.name}: ${t('map.noData')}`
     },
     visualMap: {
       type: 'piecewise',
@@ -213,12 +355,15 @@ function renderGeoMap(byCountry, date) {
       type: 'map',
       map: 'world',
       roam: true,
+      // Fill the box: the world's 2:1 aspect leaves vertical slack at zoom 1
+      zoom: 1.2,
+      center: [8, 16],
       scaleLimit: { min: 1, max: 8 },
       top: 10,
       label: { show: false },
       emphasis: { label: { show: false } },
       select: { disabled: true },
-      itemStyle: { areaColor: 'transparent', borderColor: cssVar('--border') },
+      itemStyle: { areaColor: neutralLand, borderColor: cssVar('--bg') },
       data
     }]
   }, true);
@@ -238,8 +383,49 @@ function renderCountryList(byCountry, total) {
     row.className = 'country-row' + (cc === 'other' || cc === 'unknown' ? ' other' : '');
     const label = document.createElement('span');
     label.className = 'cc';
-    label.textContent = cc;
-    label.title = COUNTRY_NAMES[cc] || cc;
+    label.textContent = cc === 'other' ? t('geo.other') : cc === 'unknown' ? t('geo.unknown') : regionName(cc);
+    label.title = cc;
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.width = `${Math.max(2, (n / max) * 100)}%`;
+    track.appendChild(bar);
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = n.toLocaleString('en-US');
+    const pct = document.createElement('span');
+    pct.className = 'pct';
+    pct.textContent = total > 0 ? `${((n / total) * 100).toFixed(1)}%` : '';
+    num.appendChild(pct);
+    row.append(label, track, num);
+    list.appendChild(row);
+  }
+}
+
+// ipv4/ipv6 shares use clearnet "reachable now" as the denominator; onion is a
+// separate series by methodology, so its row shows the count only (no share).
+function renderNetworkList() {
+  const list = document.getElementById('network-list');
+  list.textContent = '';
+  const clearnet = geoLatest?.networks?.clearnet;
+  const onion = geoLatest?.networks?.onion;
+  const rows = [];
+  for (const [net, n] of Object.entries(clearnet?.by_network || {})) {
+    rows.push({ net, n, total: clearnet.instantaneous, cls: '' });
+  }
+  for (const [net, n] of Object.entries(onion?.by_network || {})) {
+    rows.push({ net, n, total: null, cls: ' onion' });
+  }
+  if (!rows.length) return;
+  const max = Math.max(...rows.map(r => r.n));
+
+  for (const { net, n, total, cls } of rows) {
+    const row = document.createElement('div');
+    row.className = 'country-row' + cls;
+    const label = document.createElement('span');
+    label.className = 'cc';
+    label.textContent = net;
     const track = document.createElement('div');
     track.className = 'bar-track';
     const bar = document.createElement('div');
@@ -259,11 +445,12 @@ function renderCountryList(byCountry, total) {
 }
 
 function renderGeo() {
+  renderNetworkList();
   const clearnet = geoLatest?.networks?.clearnet;
   const byCountry = clearnet?.by_country;
   if (!byCountry || !Object.keys(byCountry).length) {
     document.getElementById('country-list').innerHTML =
-      '<p class="geo-empty">No country data yet (GeoIP resolution has not run).</p>';
+      `<p class="geo-empty">${t('geo.empty')}</p>`;
     return;
   }
   renderGeoMap(byCountry, geoLatest.date);
@@ -284,9 +471,33 @@ async function initGeo() {
   } catch (e) {
     console.error(e);
     document.getElementById('country-list').innerHTML =
-      '<p class="geo-empty">Country data unavailable.</p>';
+      `<p class="geo-empty">${t('geo.unavailable')}</p>`;
   }
 }
 
-darkScheme.addEventListener('change', () => { if (geoLatest) renderGeo(); });
+darkScheme.addEventListener('change', () => {
+  if (lastRangeData) render(lastRangeData);
+  if (geoLatest) renderGeo();
+});
 initGeo();
+
+/* ---- language switching -------------------------------------------------- */
+
+function applyLang(lang) {
+  LANG = lang;
+  localStorage.setItem('lang', lang);
+  document.documentElement.lang = lang;
+  document.querySelectorAll('#lang-switcher button').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang));
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.innerHTML = t(el.dataset.i18n);
+  });
+  // Redraw charts so legends / axis labels / tooltips pick up the new language
+  if (lastRangeData) render(lastRangeData);
+  if (geoLatest) renderGeo();
+}
+
+document.querySelectorAll('#lang-switcher button').forEach(b =>
+  b.addEventListener('click', () => applyLang(b.dataset.lang)));
+
+applyLang(LANG);
