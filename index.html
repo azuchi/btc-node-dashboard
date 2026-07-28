@@ -93,6 +93,25 @@
     </p>
   </section>
 
+  <section class="chart-block">
+    <h2 data-i18n="ua.title">User Agents (latest)</h2>
+    <p class="note" data-i18n="ua.note">
+      Breakdown of successful handshakes by the user agent announced during the handshake
+      (top 20 + other). The user agent is self-reported by each node and can be freely
+      spoofed — treat it as indicative, not verified. clearnet and onion stay separate.
+    </p>
+    <div class="ua-wrap">
+      <div>
+        <h3 class="sub-label">clearnet</h3>
+        <div id="ua-list-clearnet" class="country-list ua-list"></div>
+      </div>
+      <div>
+        <h3 class="sub-label">onion</h3>
+        <div id="ua-list-onion" class="country-list ua-list"></div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <p data-i18n="footer.text">
       Data: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>

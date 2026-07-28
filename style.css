@@ -122,6 +122,17 @@ a { color: var(--accent); }
 .country-row .num .pct { color: var(--muted); margin-left: 0.4rem; font-size: 0.78rem; }
 .geo-empty { color: var(--muted); padding: 1rem 0; }
 
+.ua-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 800px) { .ua-wrap { grid-template-columns: 1fr; } }
+.sub-label { font-size: 0.9rem; margin: 0.25rem 0; color: var(--muted); font-weight: 600; }
+.ua-list .country-row { grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto; }
+.ua-list .cc { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; }
+
 footer {
   margin-top: 3rem;
   padding-top: 1rem;

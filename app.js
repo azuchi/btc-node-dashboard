@@ -47,6 +47,10 @@ const I18N = {
     'network.note': 'Breakdown of the latest round by address type. ipv4 / ipv6 are the clearnet ' +
       'series; onion is measured separately and never combined. i2p / cjdns addresses are collected ' +
       'but not probed in v0.1.0, so they have no reachability numbers.',
+    'ua.title': 'User Agents (latest)',
+    'ua.note': 'Breakdown of successful handshakes by the user agent announced during the handshake ' +
+      '(top 20 + other). The user agent is self-reported by each node and can be freely spoofed — ' +
+      'treat it as indicative, not verified. clearnet and onion stay separate.',
     'country.title': 'Country Distribution (clearnet)',
     'country.note': "Successful handshakes in the latest daily export, by country of the node's IP address " +
       '(top 20 countries + other). Country reflects where the IP is registered (GeoLite2), ' +
@@ -97,6 +101,10 @@ const I18N = {
     'network.note': '最新ラウンドのアドレス種別ごとの内訳です。ipv4 / ipv6 が clearnet 系列で、' +
       'onion は別系列として測定しています（合算しません）。i2p / cjdns のアドレスも収集していますが、' +
       'v0.1.0 ではプローブ対象外のため到達数はありません。',
+    'ua.title': 'ユーザーエージェント別（最新値）',
+    'ua.note': 'ハンドシェイク時にノードが名乗ったユーザーエージェント別の内訳です（上位20 + other）。' +
+      'ユーザーエージェントは各ノードの自己申告であり自由に偽装できるため、検証済みの値ではなく参考情報として' +
+      '見てください。clearnet と onion は分けて表示しています。',
     'country.title': '国別分布（clearnet）',
     'country.note': '最新の日次エクスポートにおけるハンドシェイク成功ノードの、IP アドレスの国別内訳' +
       '（上位20カ国 + other）。国は IP の登録地（GeoLite2）であり、運用者の所在地とは限りません。' +
@@ -444,8 +452,49 @@ function renderNetworkList() {
   }
 }
 
+function renderUaList(elementId, network, cls) {
+  const list = document.getElementById(elementId);
+  list.textContent = '';
+  const byUa = network?.by_user_agent;
+  if (!byUa || !Object.keys(byUa).length) {
+    list.innerHTML = `<p class="geo-empty">${t('geo.unavailable')}</p>`;
+    return;
+  }
+  const entries = Object.entries(byUa);
+  const ranked = entries.filter(([ua]) => ua !== 'other').sort((a, b) => b[1] - a[1]);
+  const rest = entries.filter(([ua]) => ua === 'other');
+  const max = ranked.length ? ranked[0][1] : 1;
+  const total = network.instantaneous;
+
+  for (const [ua, n] of [...ranked, ...rest]) {
+    const row = document.createElement('div');
+    row.className = 'country-row' + (ua === 'other' ? ' other' : cls);
+    const label = document.createElement('span');
+    label.className = 'cc';
+    label.textContent = ua === 'other' ? t('geo.other') : ua;
+    label.title = ua;
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.width = `${Math.max(2, (n / max) * 100)}%`;
+    track.appendChild(bar);
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = n.toLocaleString('en-US');
+    const pct = document.createElement('span');
+    pct.className = 'pct';
+    pct.textContent = total > 0 ? `${((n / total) * 100).toFixed(1)}%` : '';
+    num.appendChild(pct);
+    row.append(label, track, num);
+    list.appendChild(row);
+  }
+}
+
 function renderGeo() {
   renderNetworkList();
+  renderUaList('ua-list-clearnet', geoLatest?.networks?.clearnet, '');
+  renderUaList('ua-list-onion', geoLatest?.networks?.onion, ' onion');
   const clearnet = geoLatest?.networks?.clearnet;
   const byCountry = clearnet?.by_country;
   if (!byCountry || !Object.keys(byCountry).length) {
