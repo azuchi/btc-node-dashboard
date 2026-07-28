@@ -74,6 +74,7 @@ const I18N = {
     'geo.unknown': 'unknown',
     'geo.empty': 'No country data yet (GeoIP resolution has not run).',
     'geo.unavailable': 'Country data unavailable.',
+    'ua.empty': 'No data for this network yet.',
     'error.load': 'Failed to load data'
   },
   ja: {
@@ -128,6 +129,7 @@ const I18N = {
     'geo.unknown': '不明',
     'geo.empty': '国別データはまだありません（GeoIP 解決が未実行です）。',
     'geo.unavailable': '国別データを取得できません。',
+    'ua.empty': 'このネットワークのデータはまだありません。',
     'error.load': 'データの読み込みに失敗しました'
   }
 };
@@ -457,7 +459,7 @@ function renderUaList(elementId, network, cls) {
   list.textContent = '';
   const byUa = network?.by_user_agent;
   if (!byUa || !Object.keys(byUa).length) {
-    list.innerHTML = `<p class="geo-empty">${t('geo.unavailable')}</p>`;
+    list.innerHTML = `<p class="geo-empty">${t('ua.empty')}</p>`;
     return;
   }
   const entries = Object.entries(byUa);
