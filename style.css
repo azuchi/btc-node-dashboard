@@ -69,6 +69,35 @@ a { color: var(--accent); }
 .note { font-size: 0.85rem; color: var(--muted); margin: 0.25rem 0 0.75rem; }
 .note.caveat { margin-top: 0.75rem; }
 
+.geo-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(230px, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+@media (max-width: 800px) { .geo-wrap { grid-template-columns: 1fr; } }
+.chart-map { height: 460px; }
+
+.country-list { font-size: 0.85rem; padding-top: 0.5rem; }
+.country-row {
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.22rem 0;
+}
+.country-row .cc { color: var(--fg); font-variant-numeric: tabular-nums; }
+.country-row .bar-track { min-width: 0; }
+.country-row .bar {
+  height: 8px;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+.country-row.other .bar { background: var(--muted); }
+.country-row .num { text-align: right; font-variant-numeric: tabular-nums; }
+.country-row .num .pct { color: var(--muted); margin-left: 0.4rem; font-size: 0.78rem; }
+.geo-empty { color: var(--muted); padding: 1rem 0; }
+
 footer {
   margin-top: 3rem;
   padding-top: 1rem;

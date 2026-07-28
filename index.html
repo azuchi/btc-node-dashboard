@@ -56,6 +56,24 @@
     <div id="chart-churn" class="chart chart-small"></div>
   </section>
 
+  <section class="chart-block">
+    <h2>Country Distribution (clearnet)</h2>
+    <p class="note">
+      Successful handshakes in the latest daily export, by country of the node's IP address
+      (top 20 countries + other). Country reflects where the IP is registered (GeoLite2),
+      not necessarily where the operator lives. Onion nodes have no IP and are excluded.
+    </p>
+    <div class="geo-wrap">
+      <div id="chart-map" class="chart chart-map"></div>
+      <div id="country-list" class="country-list" aria-label="Nodes by country"></div>
+    </div>
+    <p class="note caveat">
+      Includes GeoLite2 data created by MaxMind, available from
+      <a href="https://www.maxmind.com" target="_blank" rel="noopener">maxmind.com</a>.
+      Hong Kong and Taiwan appear in the ranking only (no separate polygon in the map data).
+    </p>
+  </section>
+
   <footer>
     <p>
       Data: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>
