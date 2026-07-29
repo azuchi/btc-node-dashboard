@@ -47,6 +47,19 @@ const I18N = {
     'network.note': 'Breakdown of the latest round by address type. ipv4 / ipv6 are the clearnet ' +
       'series; onion is measured separately and never combined. i2p / cjdns addresses are collected ' +
       'but not probed in v0.1.0, so they have no reachability numbers.',
+    'observer.title': "Observer's View (addrman)",
+    'observer.note': "What our vantage point can see: addresses known to the observer node's addrman, " +
+      'the candidates actually probed in the latest round (dead addresses are thinned out by ' +
+      'exponential backoff), and the nodes reached. This funnel is why the published counts ' +
+      'are lower bounds.',
+    'observer.caveat': 'Do not read known ÷ reached as a "survival rate", especially for onion: ' +
+      'onion addresses are cheap to create, often duplicated or discarded, and a failed probe ' +
+      'cannot be distinguished from a Tor circuit failure. These numbers describe the vantage ' +
+      'point, not the network.',
+    'observer.known': 'known addresses',
+    'observer.candidates': 'probed (after backoff)',
+    'observer.reachable': 'reachable',
+    'observer.extra': 'Collected but not probed in v0.1.0:',
     'ua.title': 'User Agents (latest)',
     'ua.note': 'Breakdown of successful handshakes by the user agent announced during the handshake ' +
       '(top 20 + other). The user agent is self-reported by each node and can be freely spoofed — ' +
@@ -102,6 +115,17 @@ const I18N = {
     'network.note': '最新ラウンドのアドレス種別ごとの内訳です。ipv4 / ipv6 が clearnet 系列で、' +
       'onion は別系列として測定しています（合算しません）。i2p / cjdns のアドレスも収集していますが、' +
       'v0.1.0 ではプローブ対象外のため到達数はありません。',
+    'observer.title': '観測点の視界（addrman）',
+    'observer.note': '観測ノードの addrman が保有するアドレス数 → 最新ラウンドで実際にプローブした候補数' +
+      '（連続失敗アドレスは指数バックオフで間引き）→ 到達できたノード数、という絞り込みを示します。' +
+      'このファネルが、公開している数値が下限値である理由です。',
+    'observer.caveat': '「保有 ÷ 到達」を生存率として読まないでください。特に onion はアドレス生成コストが' +
+      'ほぼゼロで重複・使い捨てが多く、プローブ失敗と Tor の回路構築失敗を区別できません。' +
+      'これらの数字は観測点の視界であって、ネットワーク全体の実態ではありません。',
+    'observer.known': '保有アドレス',
+    'observer.candidates': '候補（バックオフ後）',
+    'observer.reachable': '到達',
+    'observer.extra': '収集のみ（v0.1.0 ではプローブ対象外）:',
     'ua.title': 'ユーザーエージェント別（最新値）',
     'ua.note': 'ハンドシェイク時にノードが名乗ったユーザーエージェント別の内訳です（上位20 + other）。' +
       'ユーザーエージェントは各ノードの自己申告であり自由に偽装できるため、検証済みの値ではなく参考情報として' +
@@ -493,8 +517,63 @@ function renderUaList(elementId, network, cls) {
   }
 }
 
+// Funnel: known addresses -> probed candidates -> reached, per network class
+function renderFunnel(elementId, knownCount, network, cls) {
+  const list = document.getElementById(elementId);
+  list.textContent = '';
+  if (!knownCount || !network) {
+    list.innerHTML = `<p class="geo-empty">${t('ua.empty')}</p>`;
+    return;
+  }
+  const stages = [
+    { key: 'observer.known', n: knownCount },
+    { key: 'observer.candidates', n: network.candidates },
+    { key: 'observer.reachable', n: network.instantaneous }
+  ].filter(s => Number.isFinite(s.n));
+  const max = stages[0].n;
+
+  for (const { key, n } of stages) {
+    const row = document.createElement('div');
+    row.className = 'country-row' + cls;
+    const label = document.createElement('span');
+    label.className = 'cc';
+    label.textContent = t(key);
+    label.title = t(key);
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.width = `${Math.max(1, (n / max) * 100)}%`;
+    track.appendChild(bar);
+    const num = document.createElement('span');
+    num.className = 'num';
+    num.textContent = n.toLocaleString('en-US');
+    row.append(label, track, num);
+    list.appendChild(row);
+  }
+}
+
+function renderObserver() {
+  const addrman = geoLatest?.observer?.addrman;
+  const nets = geoLatest?.networks || {};
+  const clearnetKnown = addrman ? (addrman.ipv4 || 0) + (addrman.ipv6 || 0) : null;
+  renderFunnel('funnel-clearnet', clearnetKnown, nets.clearnet, '');
+  renderFunnel('funnel-onion', addrman?.onion, nets.onion, ' onion');
+
+  const extra = document.getElementById('observer-extra');
+  if (addrman && (addrman.i2p || addrman.cjdns)) {
+    const parts = [];
+    if (addrman.i2p) parts.push(`i2p: ${addrman.i2p.toLocaleString('en-US')}`);
+    if (addrman.cjdns) parts.push(`cjdns: ${addrman.cjdns.toLocaleString('en-US')}`);
+    extra.textContent = `${t('observer.extra')} ${parts.join(' / ')}`;
+  } else {
+    extra.textContent = '';
+  }
+}
+
 function renderGeo() {
   renderNetworkList();
+  renderObserver();
   renderUaList('ua-list-clearnet', geoLatest?.networks?.clearnet, '');
   renderUaList('ua-list-onion', geoLatest?.networks?.onion, ' onion');
   const clearnet = geoLatest?.networks?.clearnet;

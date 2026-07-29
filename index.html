@@ -79,6 +79,33 @@
   </section>
 
   <section class="chart-block">
+    <h2 data-i18n="observer.title">Observer's View (addrman)</h2>
+    <p class="note" data-i18n="observer.note">
+      What our vantage point can see: addresses known to the observer node's addrman,
+      the candidates actually probed in the latest round (dead addresses are thinned out
+      by exponential backoff), and the nodes reached. This funnel is why the published
+      counts are lower bounds.
+    </p>
+    <div class="funnel-wrap">
+      <div>
+        <h3 class="sub-label">clearnet</h3>
+        <div id="funnel-clearnet" class="country-list funnel"></div>
+      </div>
+      <div>
+        <h3 class="sub-label">onion</h3>
+        <div id="funnel-onion" class="country-list funnel"></div>
+      </div>
+    </div>
+    <p class="note" id="observer-extra"></p>
+    <p class="note caveat" data-i18n="observer.caveat">
+      Do not read known ÷ reached as a "survival rate", especially for onion: onion
+      addresses are cheap to create, often duplicated or discarded, and a failed probe
+      cannot be distinguished from a Tor circuit failure. These numbers describe the
+      vantage point, not the network.
+    </p>
+  </section>
+
+  <section class="chart-block">
     <h2 data-i18n="country.title">Country Distribution (clearnet)</h2>
     <p class="note" data-i18n="country.note">
       Successful handshakes in the latest daily export, by country of the node's IP address
