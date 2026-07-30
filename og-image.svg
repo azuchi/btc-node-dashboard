@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Source for og-image.png. Regenerate with:
+       inkscape og-image.svg -w 1200 -h 630 -o og-image.png -->
+  <rect width="1200" height="630" fill="#14161a"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#f7931a"/>
+
+  <!-- Node graph motif, echoing the favicon. Kept clear of the text column. -->
+  <g transform="translate(1010 330)" opacity="0.9">
+    <g stroke="#f7931a" stroke-width="2.5" stroke-linecap="round" opacity="0.5">
+      <line x1="0" y1="-95" x2="-80" y2="48"/>
+      <line x1="0" y1="-95" x2="80" y2="48"/>
+      <line x1="-80" y1="48" x2="80" y2="48"/>
+      <line x1="0" y1="-95" x2="0" y2="0"/>
+      <line x1="-80" y1="48" x2="0" y2="0"/>
+      <line x1="80" y1="48" x2="0" y2="0"/>
+      <line x1="0" y1="-95" x2="120" y2="-32"/>
+      <line x1="80" y1="48" x2="120" y2="-32"/>
+      <line x1="-80" y1="48" x2="-120" y2="-32"/>
+      <line x1="0" y1="-95" x2="-120" y2="-32"/>
+    </g>
+    <g fill="#f7931a">
+      <circle cx="0" cy="-95" r="13"/>
+      <circle cx="-80" cy="48" r="10"/>
+      <circle cx="80" cy="48" r="10"/>
+      <circle cx="120" cy="-32" r="8"/>
+      <circle cx="-120" cy="-32" r="8"/>
+    </g>
+    <circle cx="0" cy="0" r="15" fill="#7d4698"/>
+  </g>
+
+  <g font-family="DejaVu Sans, sans-serif">
+    <text x="80" y="225" fill="#ffffff" font-size="58" font-weight="bold">Bitcoin Node Observatory</text>
+    <text x="80" y="292" fill="#f7931a" font-size="30">Continuous measurement of reachable P2P nodes</text>
+    <text x="80" y="372" fill="#b8bcc4" font-size="25">clearnet and onion measured separately,</text>
+    <text x="80" y="408" fill="#b8bcc4" font-size="25">with a fixed, published methodology</text>
+    <text x="80" y="512" fill="#7f858f" font-size="22">Open data (CC-BY 4.0) — azuchi.github.io/btc-node-dashboard</text>
+  </g>
+</svg>
