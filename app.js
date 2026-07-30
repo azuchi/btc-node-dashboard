@@ -47,11 +47,11 @@ const I18N = {
     'network.note': 'Breakdown of the latest round by address type. ipv4 / ipv6 are the clearnet ' +
       'series; onion is measured separately and never combined. i2p / cjdns addresses are collected ' +
       'but not probed in v0.1.0, so they have no reachability numbers.',
-    'observer.title': "Observer's View (addrman)",
-    'observer.note': "What our vantage point can see: addresses known to the observer node's addrman, " +
-      'the candidates actually probed in the latest round (dead addresses are thinned out by ' +
-      'exponential backoff), and the nodes reached. This funnel is why the published counts ' +
-      'are lower bounds.',
+    'observer.title': "Observer's View",
+    'observer.note': 'What our vantage point can see: every address we know (from the observer ' +
+      "node's addrman and, when enabled, recursive getaddr discovery), the candidates actually " +
+      'probed in the latest round (dead addresses are thinned out by exponential backoff), and ' +
+      'the nodes reached. This funnel is why the published counts are lower bounds.',
     'observer.caveat': 'Do not read known ÷ reached as a "survival rate", especially for onion: ' +
       'onion addresses are cheap to create, often duplicated or discarded, and a failed probe ' +
       'cannot be distinguished from a Tor circuit failure. These numbers describe the vantage ' +
@@ -72,8 +72,8 @@ const I18N = {
       '<a href="https://www.maxmind.com" target="_blank" rel="noopener">maxmind.com</a>. ' +
       'Hong Kong and Taiwan appear in the ranking only (no separate polygon in the map data).',
     'footer.text': 'Data: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a> ' +
-      '(CC-BY 4.0 / raw data archived in Releases and on Zenodo). Measured from a single vantage point ' +
-      "with candidates sourced from our node's addrman; this is not full coverage of the network.",
+      '(CC-BY 4.0 / raw data archived in Releases and on Zenodo). Measured from a single vantage ' +
+      'point; this is not full coverage of the network.',
     'series.clearnetInst': 'clearnet reachable now',
     'series.clearnetUnion': 'clearnet seen in 24h',
     'series.onionInst': 'onion reachable now',
@@ -115,9 +115,10 @@ const I18N = {
     'network.note': '最新ラウンドのアドレス種別ごとの内訳です。ipv4 / ipv6 が clearnet 系列で、' +
       'onion は別系列として測定しています（合算しません）。i2p / cjdns のアドレスも収集していますが、' +
       'v0.1.0 ではプローブ対象外のため到達数はありません。',
-    'observer.title': '観測点の視界（addrman）',
-    'observer.note': '観測ノードの addrman が保有するアドレス数 → 最新ラウンドで実際にプローブした候補数' +
-      '（連続失敗アドレスは指数バックオフで間引き）→ 到達できたノード数、という絞り込みを示します。' +
+    'observer.title': '観測点の視界',
+    'observer.note': '観測点が把握しているアドレス数（観測ノードの addrman と、有効な場合は再帰 getaddr ' +
+      'による収集の合計）→ 最新ラウンドで実際にプローブした候補数（連続失敗アドレスは指数バックオフで' +
+      '間引き）→ 到達できたノード数、という絞り込みを示します。' +
       'このファネルが、公開している数値が下限値である理由です。',
     'observer.caveat': '「保有 ÷ 到達」を生存率として読まないでください。特に onion はアドレス生成コストが' +
       'ほぼゼロで重複・使い捨てが多く、プローブ失敗と Tor の回路構築失敗を区別できません。' +
@@ -138,8 +139,8 @@ const I18N = {
       '（<a href="https://www.maxmind.com" target="_blank" rel="noopener">maxmind.com</a>）。' +
       '香港・台湾は地図データに単独ポリゴンがないためランキングのみに表示されます。',
     'footer.text': 'データ: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>' +
-      '（CC-BY 4.0 / raw データは Releases と Zenodo にアーカイブ）。単一観測点から、自ノードの addrman を' +
-      '候補として測定しており、ネットワーク全体の完全な網羅ではありません。',
+      '（CC-BY 4.0 / raw データは Releases と Zenodo にアーカイブ）。単一観測点からの測定であり、' +
+      'ネットワーク全体の完全な網羅ではありません。',
     'series.clearnetInst': 'clearnet（現在）',
     'series.clearnetUnion': 'clearnet（24h以内）',
     'series.onionInst': 'onion（現在）',
@@ -554,17 +555,17 @@ function renderFunnel(elementId, knownCount, network, cls) {
 }
 
 function renderObserver() {
-  const addrman = geoLatest?.observer?.addrman;
+  const known = geoLatest?.observer?.known_addresses;
   const nets = geoLatest?.networks || {};
-  const clearnetKnown = addrman ? (addrman.ipv4 || 0) + (addrman.ipv6 || 0) : null;
+  const clearnetKnown = known ? (known.ipv4 || 0) + (known.ipv6 || 0) : null;
   renderFunnel('funnel-clearnet', clearnetKnown, nets.clearnet, '');
-  renderFunnel('funnel-onion', addrman?.onion, nets.onion, ' onion');
+  renderFunnel('funnel-onion', known?.onion, nets.onion, ' onion');
 
   const extra = document.getElementById('observer-extra');
-  if (addrman && (addrman.i2p || addrman.cjdns)) {
+  if (known && (known.i2p || known.cjdns)) {
     const parts = [];
-    if (addrman.i2p) parts.push(`i2p: ${addrman.i2p.toLocaleString('en-US')}`);
-    if (addrman.cjdns) parts.push(`cjdns: ${addrman.cjdns.toLocaleString('en-US')}`);
+    if (known.i2p) parts.push(`i2p: ${known.i2p.toLocaleString('en-US')}`);
+    if (known.cjdns) parts.push(`cjdns: ${known.cjdns.toLocaleString('en-US')}`);
     extra.textContent = `${t('observer.extra')} ${parts.join(' / ')}`;
   } else {
     extra.textContent = '';

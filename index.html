@@ -79,12 +79,12 @@
   </section>
 
   <section class="chart-block">
-    <h2 data-i18n="observer.title">Observer's View (addrman)</h2>
+    <h2 data-i18n="observer.title">Observer's View</h2>
     <p class="note" data-i18n="observer.note">
-      What our vantage point can see: addresses known to the observer node's addrman,
-      the candidates actually probed in the latest round (dead addresses are thinned out
-      by exponential backoff), and the nodes reached. This funnel is why the published
-      counts are lower bounds.
+      What our vantage point can see: every address we know (from the observer node's
+      addrman and, when enabled, recursive getaddr discovery), the candidates actually
+      probed in the latest round (dead addresses are thinned out by exponential backoff),
+      and the nodes reached. This funnel is why the published counts are lower bounds.
     </p>
     <div class="funnel-wrap">
       <div>
@@ -146,8 +146,7 @@
     <p data-i18n="footer.text">
       Data: <a href="https://github.com/azuchi/btc-node-data" target="_blank" rel="noopener">btc-node-data</a>
       (CC-BY 4.0 / raw data archived in Releases and on Zenodo).
-      Measured from a single vantage point with candidates sourced from our node's addrman;
-      this is not full coverage of the network.
+      Measured from a single vantage point; this is not full coverage of the network.
     </p>
   </footer>
 
