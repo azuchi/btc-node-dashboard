@@ -37,7 +37,9 @@ const I18N = {
       'last 24 hours (KIT-style, upper bound). ' +
       '<a href="https://github.com/azuchi/btc-node-data#dual-definition-of-reachability" target="_blank" rel="noopener">Definitions</a>',
     'nodeCount.caveat': '⚠ Onion absolute counts are not authoritative: address count ≠ host count, ' +
-      'no cross-checking is possible, and Sybil creation costs are near zero. Watch trends in ratios instead. ' +
+      'no cross-checking is possible, Sybil creation costs are near zero, and the figure is capped by ' +
+      'our Tor capacity — 98% of onion probes time out, so it reflects what we could confirm, not how ' +
+      'many onion nodes exist. Watch trends in ratios instead. ' +
       '<a href="https://github.com/azuchi/btc-node-data#epistemic-weakness-of-onion-node-counts" target="_blank" rel="noopener">Details</a>',
     'churn.title': 'Node-Set Stability (reachable now ÷ seen in 24h)',
     'churn.note': 'The share of nodes seen at least once in the last 24 hours that are reachable ' +
@@ -106,7 +108,9 @@ const I18N = {
       '直近24時間に一度でも応答したノードの総数（KIT 方式、上限値）です。' +
       '<a href="https://github.com/azuchi/btc-node-data#dual-definition-of-reachability" target="_blank" rel="noopener">定義</a>',
     'nodeCount.caveat': '⚠ onion の絶対数は確定的な数値ではありません: アドレス数 ≠ ホスト数であり、' +
-      '相互検証が不可能で、Sybil 作成コストがほぼゼロのためです。比率の推移に注目してください。' +
+      '相互検証が不可能で、Sybil 作成コストがほぼゼロだからです。加えてこの数値は当方の Tor 処理能力に' +
+      '律速されており（プローブの98%がタイムアウト）、onion ノードの実数ではなく「確認できた数」です。' +
+      '比率の推移に注目してください。' +
       '<a href="https://github.com/azuchi/btc-node-data#epistemic-weakness-of-onion-node-counts" target="_blank" rel="noopener">詳細</a>',
     'churn.title': 'ノード集合の安定度（現在到達可能 ÷ 24時間以内に到達）',
     'churn.note': '直近24時間に一度でも到達できたノードのうち、いま到達できているノードの割合です。' +
